@@ -1481,7 +1481,10 @@ public class Hero extends Char {
 		
 		return super.defenseProc( enemy, damage );
 	}
-	
+	// yes im lazy what so? -VencedorLOL
+	public static boolean isUsingTenacity = false;
+	public static int rRD = 0;
+	public static boolean isDamageGettingExecuted = false;
 	@Override
 	public void damage( int dmg, Object src ) {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null
@@ -1521,23 +1524,43 @@ public class Hero extends Char {
 			dmg = thorns.proc(dmg, (src instanceof Char ? (Char)src : null),  this);
 		}
 
-		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
+		isUsingTenacity = RingOfTenacity.damageMultiplier(this) != 1;
+		//short for ringReducedDamage
+		rRD = dmg;
+
+		dmg = (int) Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
+
+		rRD -= dmg;
+
 
 		//TODO improve this when I have proper damage source logic
 		if (belongings.armor() != null && belongings.armor().hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
-			dmg -= AntiMagic.drRoll(this, belongings.armor().buffedLvl());
+			int magicRoll = AntiMagic.drRoll(this, belongings.armor().buffedLvl());
+			dmg -= magicRoll;
 			dmg = Math.max(dmg, 0);
+			rRD -= magicRoll;
+			rRD = Math.max(rRD, 0);
 		}
 
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
-			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       dmg = Math.round(dmg*0.25f);
-			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  dmg = Math.round(dmg*0.00f);
+			if (pointsInTalent(Talent.IRON_STOMACH) == 1) {
+				dmg = Math.round(dmg * 0.25f);
+				rRD = Math.round(dmg * 0.25f);
+			}
+			else if (pointsInTalent(Talent.IRON_STOMACH) == 2) {
+				dmg = Math.round(dmg * 0.00f);
+				rRD = 0;
+			}
 		}
 
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
+		isDamageGettingExecuted = true;
 		super.damage( dmg, src );
+		isDamageGettingExecuted = false;
+		isUsingTenacity = false;
+		rRD = 0;
 		int postHP = HP + shielding();
 		if (src instanceof Hunger) postHP -= shielding();
 		int effectiveDamage = preHP - postHP;

@@ -145,11 +145,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero.rRD;
+
 public abstract class Char extends Actor {
 	
 	public int pos = 0;
 	
 	public CharSprite sprite;
+	public CharSprite tenacityDamage;
 	
 	public int HT;
 	public int HP;
@@ -688,7 +691,7 @@ public abstract class Char extends Actor {
 	}
 	
 	public void damage( int dmg, Object src ) {
-		
+		boolean isHero = Hero.isDamageGettingExecuted && Hero.isUsingTenacity && rRD != 0;
 		if (!isAlive() || dmg < 0) {
 			return;
 		}
@@ -707,6 +710,7 @@ public abstract class Char extends Actor {
 				}
 			}
 			dmg = (int)Math.ceil(dmg / (float)(links.size()+1));
+			rRD = (int)Math.ceil(rRD / (float)(links.size()+1));
 			for (LifeLink link : links){
 				Char ch = (Char)Actor.findById(link.object);
 				if (ch != null) {
@@ -738,9 +742,11 @@ public abstract class Char extends Actor {
 		}
 		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
 			dmg *= 1.67f;
+			rRD *= 1.67f;
 		}
 		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
 			dmg *= 1.25f;
+			rRD *= 1.25f;
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
@@ -761,19 +767,24 @@ public abstract class Char extends Actor {
 
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
+			rRD = (int) Math.ceil(rRD * buff.damageTakenFactor());
 		}
 
 		Class<?> srcClass = src.getClass();
 		if (isImmune( srcClass )) {
 			dmg = 0;
+			rRD = 0;
 		} else {
 			dmg = Math.round( dmg * resist( srcClass ));
+			rRD = Math.round( rRD * resist( srcClass ));
 		}
 		
 		//TODO improve this when I have proper damage source logic
 		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
 			dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
-			if (dmg < 0) dmg = 0;
+			rRD -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
+			if (dmg < 0){ dmg = 0;
+			rRD = 0;}
 		}
 		
 		if (buff( Paralysis.class ) != null) {
@@ -785,6 +796,7 @@ public abstract class Char extends Actor {
 		if (!(src instanceof Hunger)){
 			for (ShieldBuff s : buffs(ShieldBuff.class)){
 				dmg = s.absorbDamage(dmg);
+				rRD = s.absorbDamage(rRD);
 				if (dmg == 0) break;
 			}
 		}
@@ -858,7 +870,14 @@ public abstract class Char extends Actor {
 
 			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
 		}
+		if (isHero)
+			if(tenacityDamage != null){
+				tenacityDamage.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(rRD),19);
+			}
+			else if (sprite != null)
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(rRD),19);
 
+		rRD = 0;
 		if (HP < 0) HP = 0;
 
 		if (!isAlive()) {
