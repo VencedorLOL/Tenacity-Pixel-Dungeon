@@ -71,7 +71,7 @@ Note that JAR files will require a [Java runtime enviroment](https://www.java.co
 
 Shattered Pixel Dungeon uses [JPackage](https://dev.java/learn/jpackage/) and [Badass Runtime](https://badass-runtime-plugin.beryx.org/releases/latest/) to generate platform-specific executables that don't require users to install Java to run the game. This process is unfortunately more awkward, locks the game to a specific operating system, and produces larger files. Because of this JARs are recommended as a simpler starting point.
 
-Just like with a JAR, generating a platform-specific executable requires a new run configuration. Use 'jpackageimage' instead of 'release'. This may take a bit of time, and will generate an executable file in the `/desktop/build/jpackage` folder. All the specific configurations for badass runtime and jpackage are already set up, but you can view them in the 'runtime' block in [desktop/build.gradle](./desktop/build.gradle).
+Just like with a JAR, generating a platform-specific executable requires a new run configuration. Use './gradlew desktop:jpackageimage' instead of 'release'. This may take a bit of time, and will generate an executable file in the `/desktop/build/jpackage` folder. All the specific configurations for badass runtime and jpackage are already set up, but you can view them in the 'runtime' block in [desktop/build.gradle](./desktop/build.gradle).
 
 You will only be able to create an executable that matches the operation system you are currently using:
 - If you have a Windows computer, you can generate a folder with a Windows .exe file inside (zip before distributing)

@@ -61,7 +61,7 @@ public enum Icons {
 	LEFTARROW,
 	RIGHTARROW,
 	CALENDAR,
-	CHEVRON,
+	CHEVRON, VENCEDOR,
 
 	//misc larger icons, mainly used for buttons, tabs, and journal, spacing for 16x16
 	TARGET,
@@ -169,7 +169,9 @@ public enum Icons {
 			case JOURNAL:
 				icon.frame( icon.texture.uvRectBySize( 136, 0, 17, 15 ) );
 				break;
-
+			case VENCEDOR:
+				icon.frame( icon.texture.uvRectBySize( 152, 0, 16, 16 ) );
+				break;
 			case EXIT:
 				icon.frame( icon.texture.uvRectBySize( 0, 16, 15, 11 ) );
 				break;

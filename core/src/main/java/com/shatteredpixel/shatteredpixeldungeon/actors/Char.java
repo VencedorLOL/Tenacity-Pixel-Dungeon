@@ -870,12 +870,8 @@ public abstract class Char extends Actor {
 
 			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
 		}
-		if (isHero)
-			if(tenacityDamage != null){
-				tenacityDamage.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(rRD),19);
-			}
-			else if (sprite != null)
-				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(rRD),19);
+		if (isHero && sprite != null)
+				sprite.showStatusWithIcon(0x3c9FF0, Integer.toString(rRD),25);
 
 		rRD = 0;
 		if (HP < 0) HP = 0;

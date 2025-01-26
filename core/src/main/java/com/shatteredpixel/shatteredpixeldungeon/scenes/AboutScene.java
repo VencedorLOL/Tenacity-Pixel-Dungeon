@@ -62,6 +62,19 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
+		//*** Tenacity Pixel Dungeon Credits ***
+
+		CreditsBlock vencedor = new CreditsBlock(true, Window.VENCE_COLOR,
+				"Tenacity Pixel Dungeon",
+				Icons.VENCEDOR.get(),
+				"Developed by: Vencedor (on discord vencedorlol) \nBased on Shattered Pixel Dungeon's open source. -I am not good at pixel art, nor at icons (It is supposed to be a sword with a v-shaped hand protector...), nor at GUIs, as you can see, lmao.",
+				"github.com/VencedorLOL/Tenacity-Pixel-Dungeon",
+				"https://github.com/VencedorLOL/Tenacity-Pixel-Dungeon");
+
+		vencedor.setRect((Camera.main.width - colWidth)/6f, 10, colWidth*4f, 0);
+
+		content.add(vencedor);
+
 		//*** Shattered Pixel Dungeon Credits ***
 
 		CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,
@@ -71,11 +84,14 @@ public class AboutScene extends PixelScene {
 				"ShatteredPixel.com",
 				"https://ShatteredPixel.com");
 		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, 10, 120, 0);
+			shpx.setRect((w-fullWidth)/4f, vencedor.bottom() + 14, colWidth, 0);
 		} else {
-			shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+			shpx.setRect((w-fullWidth)/4f, vencedor.bottom() + 14, colWidth, 0);
 		}
 		content.add(shpx);
+
+
+
 
 		CreditsBlock alex = new CreditsBlock(false, Window.SHPX_COLOR,
 				"Splash Art & Design:",
@@ -109,6 +125,8 @@ public class AboutScene extends PixelScene {
 		kristjan.setRect(alex.right() - colWidth/4f, alex.bottom() + 5, colWidth/2f, 0);
 		content.add(kristjan);
 
+		addLine(vencedor.bottom() + 4, content);
+
 		//*** Pixel Dungeon Credits ***
 
 		final int WATA_COLOR = 0x55AAFF;
@@ -119,13 +137,11 @@ public class AboutScene extends PixelScene {
 				"watabou.itch.io",
 				"https://watabou.itch.io/");
 		if (landscape()){
-			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
+			wata.setRect(charlie.right(), vencedor.bottom() + 14, colWidth, 0);
 		} else {
-			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
+			wata.setRect(charlie.right(), vencedor.bottom() + 14, colWidth, 0);
 		}
 		content.add(wata);
-
-		addLine(wata.top() - 4, content);
 
 		CreditsBlock cube = new CreditsBlock(false, WATA_COLOR,
 				"Music:",
@@ -152,9 +168,9 @@ public class AboutScene extends PixelScene {
 				"libgdx.com",
 				"https://libgdx.com/");
 		if (landscape()){
-			gdx.setRect(wata.left(), wata.bottom() + 8, colWidth, 0);
+			gdx.setRect((Camera.main.width - colWidth)/3f, kristjan.bottom() + 8, colWidth, 0);
 		} else {
-			gdx.setRect(wata.left(), cube.bottom() + 8, colWidth, 0);
+			gdx.setRect((Camera.main.width - colWidth)/3f, kristjan.bottom() + 8, colWidth, 0);
 		}
 		content.add(gdx);
 
