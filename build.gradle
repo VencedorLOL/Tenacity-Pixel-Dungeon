@@ -17,8 +17,8 @@ allprojects {
         appName = 'Bad Rings Pixel Dungeon'
         appPackageName = 'com.vnecedor.badringspd'
 
-        appVersionCode = 831
-        appVersionName = '3.0.0'
+        appVersionCode = 832
+        appVersionName = '3.0.1'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
