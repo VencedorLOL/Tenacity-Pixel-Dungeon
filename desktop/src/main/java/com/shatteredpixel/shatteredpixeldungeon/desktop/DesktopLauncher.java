@@ -38,7 +38,6 @@ import com.watabou.utils.FileUtils;
 import com.watabou.utils.Point;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import sun.security.krb5.internal.crypto.Des;
 
 import java.io.PrintWriter;
@@ -102,20 +101,20 @@ public class DesktopLauncher extends Thread {
 				}
 
 				if (exceptionMsg.contains("Couldn’t create window")) {
-					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+					System.out.println(title + " Has Crashed!"+
 							title + " was not able to initialize its graphics display, sorry about that!\n\n" +
 									"This usually happens when your graphics card has misconfigured drivers or does not support openGL 2.0+.\n\n" +
 									"If you are certain the game should work on your computer, please message the developer (Evan@ShatteredPixel.com)\n\n" +
 									"version: " + Game.version + "\n" +
-									exceptionMsg,
-							"ok", "error", false);
+									exceptionMsg+
+							"ok"+ "error");
 				} else {
-					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+					System.out.println(title + " Has Crashed!"+
 							title + " has run into an error it cannot recover from and has crashed, sorry about that!\n\n" +
 									"If you could, please email this error message to the developer (Evan@ShatteredPixel.com):\n\n" +
 									"version: " + Game.version + "\n" +
-									exceptionMsg,
-							"ok", "error", false);
+									exceptionMsg+
+							"ok"+ "error"+ false);
 				}
 				System.exit(1);
 			}
@@ -276,20 +275,20 @@ public class DesktopLauncher extends Thread {
 					}
 
 					if (exceptionMsg.contains("Couldn’t create window")) {
-						TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+						System.out.println(title + " Has Crashed!"+
 								title + " was not able to initialize its graphics display, sorry about that!\n\n" +
 										"This usually happens when your graphics card has misconfigured drivers or does not support openGL 2.0+.\n\n" +
 										"If you are certain the game should work on your computer, please message the developer (Evan@ShatteredPixel.com)\n\n" +
 										"version: " + Game.version + "\n" +
-										exceptionMsg,
-								"ok", "error", false);
+										exceptionMsg+
+								"ok"+ "error");
 					} else {
-						TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+						System.out.println(title + " Has Crashed!"+
 								title + " has run into an error it cannot recover from and has crashed, sorry about that!\n\n" +
 										"If you could, please email this error message to the developer (Evan@ShatteredPixel.com):\n\n" +
 										"version: " + Game.version + "\n" +
-										exceptionMsg,
-								"ok", "error", false);
+										exceptionMsg+
+								"ok"+ "error");
 					}
 					System.exit(1);
 				}

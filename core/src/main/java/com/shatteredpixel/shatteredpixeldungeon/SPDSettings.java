@@ -488,6 +488,6 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static boolean getRoute() {
-	return getBoolean(ROUTE,false);
+		return getBoolean(ROUTE,false);
 	}
 }
