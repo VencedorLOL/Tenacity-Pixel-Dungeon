@@ -471,4 +471,13 @@ public class SPDSettings extends GameSettings {
 	public static int fulLScreenMonitor(){
 		return getInt( KEY_FULLSCREEN_MONITOR, 0 );
 	}
+
+	public static final String ROUTE = "route";
+	public static void useShatteredRoute(boolean b) {
+		put(ROUTE, b);
+	}
+
+	public static boolean getRoute() {
+	return getBoolean(ROUTE,false);
+	}
 }

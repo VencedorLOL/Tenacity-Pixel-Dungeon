@@ -56,10 +56,10 @@ import com.watabou.utils.DeviceCompat;
 import java.util.Date;
 
 public class TitleScene extends PixelScene {
-	
+
 	@Override
 	public void create() {
-		
+
 		super.create();
 
 		Music.INSTANCE.playTracks(
@@ -68,14 +68,14 @@ public class TitleScene extends PixelScene {
 				false);
 
 		uiCamera.visible = false;
-		
+
 		int w = Camera.main.width;
 		int h = Camera.main.height;
-		
+
 		Archs archs = new Archs();
 		archs.setSize( w, h );
 		add( archs );
-		
+
 		Image title = BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON );
 		add( title );
 
@@ -109,7 +109,7 @@ public class TitleScene extends PixelScene {
 		add( signs );
 
 		final Chrome.Type GREY_TR = Chrome.Type.GREY_BUTTON_TR;
-		
+
 		StyledButton btnPlay = new StyledButton(GREY_TR, Messages.get(this, "enter")){
 			@Override
 			protected void onClick() {
@@ -121,7 +121,7 @@ public class TitleScene extends PixelScene {
 					ShatteredPixelDungeon.switchNoFade( StartScene.class );
 				}
 			}
-			
+
 			@Override
 			protected boolean onLongClick() {
 				//making it easier to start runs quickly while debugging
@@ -170,6 +170,9 @@ public class TitleScene extends PixelScene {
 		StyledButton btnSettings = new SettingsButton(GREY_TR, Messages.get(this, "settings"));
 		add(btnSettings);
 
+		StyledButton btnRouteChange = new RouteButton(GREY_TR, "Change of file route to use your saves!");
+		add(btnRouteChange);
+
 		StyledButton btnAbout = new StyledButton(GREY_TR, Messages.get(this, "about")){
 			@Override
 			protected void onClick() {
@@ -178,7 +181,7 @@ public class TitleScene extends PixelScene {
 		};
 		btnAbout.icon(Icons.get(Icons.SHPX));
 		add(btnAbout);
-		
+
 		final int BTN_HEIGHT = 20;
 		int GAP = (int)(h - topRegion - (landscape() ? 3 : 4)*BTN_HEIGHT)/3;
 		GAP /= landscape() ? 3 : 5;
@@ -194,6 +197,7 @@ public class TitleScene extends PixelScene {
 			btnSettings.setRect(btnRankings.left(), btnRankings.bottom() + GAP, btnRankings.width(), BTN_HEIGHT);
 			btnChanges.setRect(btnSettings.right()+2, btnSettings.top(), btnRankings.width(), BTN_HEIGHT);
 			btnAbout.setRect(btnChanges.right()+2, btnSettings.top(), btnRankings.width(), BTN_HEIGHT);
+			btnRouteChange.setRect(btnPlay.left(), btnAbout.bottom(), btnPlay.width()*2+2, BTN_HEIGHT);
 		} else {
 			btnPlay.setRect(title.x, topRegion+GAP, title.width(), BTN_HEIGHT);
 			align(btnPlay);
@@ -204,6 +208,7 @@ public class TitleScene extends PixelScene {
 			btnChanges.setRect(btnNews.right()+2, btnNews.top(), btnNews.width(), BTN_HEIGHT);
 			btnSettings.setRect(btnNews.left(), btnNews.bottom()+GAP, btnRankings.width(), BTN_HEIGHT);
 			btnAbout.setRect(btnSettings.right()+2, btnSettings.top(), btnSettings.width(), BTN_HEIGHT);
+			btnRouteChange.setRect(btnPlay.right()+2, btnAbout.bottom(), btnPlay.width(), BTN_HEIGHT*2);
 		}
 
 		BitmapText version = new BitmapText( "v" + Game.version, pixelFont);
@@ -371,4 +376,26 @@ public class TitleScene extends PixelScene {
 			ShatteredPixelDungeon.switchNoFade(SupporterScene.class);
 		}
 	}
+
+	public static boolean immediatelyReOpenTheGameAfterClosed = false;
+	private static class RouteButton extends StyledButton{
+
+		public RouteButton( Chrome.Type type, String label ){
+			super(type, label);
+			if (SPDSettings.getRoute())
+				icon(Icons.get(Icons.VENCEDOR));
+			else
+				icon(Icons.get(Icons.SHPX));
+			textColor(Window.TITLE_COLOR);
+		}
+
+		@Override
+		protected void onClick(){
+			SPDSettings.useShatteredRoute(!SPDSettings.getRoute());
+			immediatelyReOpenTheGameAfterClosed = true;
+			// need a way ok killing this thread.
+			throw new RuntimeException("ReOpenException");
+		}
+	}
+
 }
